@@ -31,23 +31,27 @@ public class BookDaoImpl implements BookDao {
     @Nonnull
     @Override
     public Book update(@Nonnull Book entity) {
-        return null;
+        return entityManager.merge(entity);
     }
 
     @Nullable
     @Override
-    public Book delete(@Nonnull Integer integer) {
-        return null;
+    public Book delete(@Nonnull Integer id) {
+        Book book = entityManager.find(Book.class, id);
+        entityManager.remove(book);
+        return book;
     }
 
     @Nullable
     @Override
     public Integer create(@Nonnull Book entity) {
-        return null;
+        entityManager.persist(entity);
+        return entity.getId();
     }
 
     @Override
     public void deleteAll() {
-
+        List<Book> books = findAll();
+        books.forEach(b -> delete(b.getId()));
     }
 }
